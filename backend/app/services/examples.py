@@ -9,7 +9,7 @@ def get_example_graphs() -> list[ExampleGraph]:
             id="classic_clrs",
             title="Exemple classique de flot maximum",
             description=(
-                "Petit reseau oriente souvent utilise pour illustrer "
+                "Petit réseau orienté souvent utilisé pour illustrer "
                 "les algorithmes de flot maximum."
             ),
             graph=GraphInput(
@@ -39,16 +39,16 @@ def get_example_graphs() -> list[ExampleGraph]:
         ),
         ExampleGraph(
             id="urban_transport",
-            title="Reseau de transport urbain",
+            title="Réseau de transport urbain",
             description=(
-                "Un reseau plus interpretable en logistique, avec hubs "
-                "intermediaires et plusieurs goulets d'etranglement."
+                "Un réseau plus interprétable en logistique, avec hubs "
+                "intermédiaires et plusieurs goulets d'étranglement."
             ),
             graph=GraphInput(
                 source="depot",
                 sink="centre",
                 nodes=[
-                    NodeInput(id="depot", label="Depot", x=80, y=220),
+                    NodeInput(id="depot", label="Dépôt", x=80, y=220),
                     NodeInput(id="hub_nord", label="Hub Nord", x=250, y=80),
                     NodeInput(id="hub_sud", label="Hub Sud", x=250, y=360),
                     NodeInput(id="tri_est", label="Tri Est", x=450, y=120),
