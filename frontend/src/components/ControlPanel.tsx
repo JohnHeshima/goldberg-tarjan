@@ -40,7 +40,7 @@ export function ControlPanel({
 
       <div className="stack">
         <label>
-          <span>Exemples precharges</span>
+          <span>Exemples préchargés</span>
           <select
             value={selectedExampleId}
             onChange={(event) => onExampleSelect(event.target.value)}
@@ -55,13 +55,13 @@ export function ControlPanel({
 
         <div className="button-row">
           <button className="primary-button" onClick={() => onRun("step")} disabled={loading}>
-            Execution pas a pas
+            Exécution pas à pas
           </button>
           <button className="secondary-button" onClick={() => onRun("full")} disabled={loading}>
-            Execution complete
+            Exécution complète
           </button>
           <button className="ghost-button" onClick={onReset} disabled={loading}>
-            Reset graphe
+            Réinitialiser le graphe
           </button>
         </div>
 
@@ -69,7 +69,7 @@ export function ControlPanel({
           <>
             <div className="step-nav">
               <button className="ghost-button" onClick={onPrevious}>
-                Precedent
+                Précédent
               </button>
               <button className="ghost-button" onClick={onNext}>
                 Suivant
