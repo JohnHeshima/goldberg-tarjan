@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
 import {
   Background,
   Controls,
   MarkerType,
   MiniMap,
   ReactFlow,
+  type ReactFlowInstance,
   type Edge,
   type Node,
   type OnNodeDrag,
@@ -27,7 +29,7 @@ function getNodeMetrics(graph: GraphDefinition, step: AlgorithmStep | null) {
 
     const label = vertex
       ? `${vertex.label}\nh=${vertex.height} | e=${vertex.excess.toFixed(2)}`
-      : `${node.label ?? node.id}\nmode edition`;
+      : `${node.label ?? node.id}\nmode édition`;
 
     const style = vertex?.is_source
       ? {
@@ -118,36 +120,76 @@ export function GraphCanvas({
 }: GraphCanvasProps) {
   const nodes = getNodeMetrics(graph, step);
   const edges = getEdgeMetrics(graph, step);
+  const [flowInstance, setFlowInstance] = useState<ReactFlowInstance | null>(null);
 
   const handleNodeDragStop: OnNodeDrag = (_, node) => {
     onNodePositionChange(node.id, node.position.x, node.position.y);
   };
+
+  useEffect(() => {
+    if (!flowInstance) {
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      flowInstance.fitView({
+        padding: 0.22,
+        duration: 450,
+        minZoom: 0.35,
+        maxZoom: 1.15,
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [flowInstance, graph.nodes, graph.edges, step?.index]);
+
+  const activeVertexCount = step?.active_vertices.length ?? 0;
+  const highlightedEdge = step?.details.edge_id ?? null;
 
   return (
     <section className="panel graph-panel">
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Visualisation</p>
-          <h2>Reseau interactif</h2>
+          <h2>Réseau interactif</h2>
         </div>
         {step ? <span className="status-pill">{step.action.toUpperCase()}</span> : null}
       </div>
 
-      <div className="graph-shell">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          fitView
-          minZoom={0.3}
-          onNodeDragStop={handleNodeDragStop}
-          defaultEdgeOptions={{
-            type: "smoothstep",
-          }}
-        >
-          <MiniMap pannable zoomable />
-          <Controls />
-          <Background gap={24} size={1} color="rgba(148, 163, 184, 0.25)" />
-        </ReactFlow>
+      <div className="graph-stage">
+        <div className="graph-shell">
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            fitView
+            minZoom={0.3}
+            onInit={setFlowInstance}
+            onNodeDragStop={handleNodeDragStop}
+            defaultEdgeOptions={{
+              type: "smoothstep",
+            }}
+          >
+            <MiniMap pannable zoomable />
+            <Controls />
+            <Background gap={24} size={1} color="rgba(148, 163, 184, 0.25)" />
+          </ReactFlow>
+        </div>
+
+        <div className="graph-footer">
+          <div className="graph-footer-metrics">
+            <span className="editor-chip">Sommets {graph.nodes.length}</span>
+            <span className="editor-chip">Arcs {graph.edges.length}</span>
+            <span className="editor-chip">Actifs {activeVertexCount}</span>
+            {highlightedEdge ? (
+              <span className="editor-chip">Arc cible {highlightedEdge}</span>
+            ) : null}
+          </div>
+
+          <p className="graph-footer-note">
+            Le graphe se recadre automatiquement après chaque édition. Déplacez un sommet à la souris,
+            utilisez la molette pour zoomer et le bouton Repositionner pour nettoyer la mise en page.
+          </p>
+        </div>
       </div>
     </section>
   );
