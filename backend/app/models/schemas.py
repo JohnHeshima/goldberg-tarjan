@@ -22,7 +22,7 @@ class EdgeInput(BaseModel):
     @classmethod
     def validate_capacity(cls, value: float) -> float:
         if value < 0:
-            raise ValueError("La capacite doit etre positive ou nulle.")
+            raise ValueError("La capacité doit être positive ou nulle.")
         return float(value)
 
 
@@ -39,7 +39,7 @@ class GraphInput(BaseModel):
             raise ValueError("Chaque sommet doit avoir un identifiant unique.")
 
         if self.source == self.sink:
-            raise ValueError("La source et le puits doivent etre differents.")
+            raise ValueError("La source et le puits doivent être différents.")
 
         if self.source not in node_ids:
             raise ValueError("La source n'existe pas dans la liste des sommets.")
@@ -54,7 +54,7 @@ class GraphInput(BaseModel):
         ]
         if unknown_nodes:
             raise ValueError(
-                "Tous les arcs doivent referencer des sommets existants. "
+                "Tous les arcs doivent référencer des sommets existants. "
                 f"Arcs invalides: {', '.join(unknown_nodes)}"
             )
 
