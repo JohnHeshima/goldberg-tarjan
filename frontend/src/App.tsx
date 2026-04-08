@@ -49,7 +49,7 @@ export default function App() {
         setGraph(nextGraph);
       } catch {
         setError(
-          "Impossible de joindre l'API pour charger les exemples. Les donnees locales de demonstration restent disponibles.",
+          "Impossible de joindre l'API pour charger les exemples. Les données locales de démonstration restent disponibles.",
         );
       }
     }
@@ -108,7 +108,7 @@ export default function App() {
       setError(
         runError instanceof Error
           ? runError.message
-          : "La simulation a echoue. Verifiez la coherence du graphe et l'etat du backend.",
+          : "La simulation a échoué. Vérifiez la cohérence du graphe et l'état du backend.",
       );
     } finally {
       setLoading(false);
@@ -141,12 +141,12 @@ export default function App() {
           <p className="eyebrow">Goldberg-Tarjan / Push-Relabel</p>
           <h1>Laboratoire visuel du flot maximum</h1>
           <p className="hero-text">
-            Simulation complete de l’algorithme avec API FastAPI, interface React, graphe interactif
-            et inspection pas a pas des excès, hauteurs et pushes.
+            Simulation complète de l’algorithme avec API FastAPI, interface React, graphe interactif
+            et inspection pas à pas des excès, hauteurs et pushes.
           </p>
         </div>
         <div className="hero-card">
-          <span className="hero-label">Scenario actif</span>
+          <span className="hero-label">Scénario actif</span>
           <strong>{examples.find((example) => example.id === selectedExampleId)?.title}</strong>
           <p>{currentExampleDescription}</p>
         </div>
