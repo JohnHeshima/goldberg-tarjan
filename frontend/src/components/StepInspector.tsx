@@ -11,11 +11,11 @@ export function StepInspector({ step }: StepInspectorProps) {
         <div className="panel-heading">
           <div>
             <p className="eyebrow">Analyse</p>
-            <h2>Etat courant</h2>
+            <h2>État courant</h2>
           </div>
         </div>
         <p className="muted">
-          Aucun etat disponible pour l’instant. Executez la simulation pour explorer chaque operation.
+          Aucun état disponible pour l’instant. Exécutez la simulation pour explorer chaque opération.
         </p>
       </section>
     );
@@ -26,9 +26,9 @@ export function StepInspector({ step }: StepInspectorProps) {
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Analyse</p>
-          <h2>Etat courant</h2>
+          <h2>État courant</h2>
         </div>
-        <div className={`action-tag action-${step.action}`}>Etape {step.index + 1}</div>
+        <div className={`action-tag action-${step.action}`}>Étape {step.index + 1}</div>
       </div>
 
       <div className="stack">
@@ -42,7 +42,7 @@ export function StepInspector({ step }: StepInspectorProps) {
             <strong>{step.active_vertex ?? "-"}</strong>
           </article>
           <article className="metric-card">
-            <span>Flot cumule</span>
+            <span>Flot cumulé</span>
             <strong>{step.total_flow.toFixed(2)}</strong>
           </article>
         </div>
@@ -63,7 +63,7 @@ export function StepInspector({ step }: StepInspectorProps) {
 
         <div className="detail-grid">
           <article className="detail-card">
-            <h3>Operation</h3>
+            <h3>Opération</h3>
             <dl>
               <div>
                 <dt>Arc</dt>
@@ -90,7 +90,7 @@ export function StepInspector({ step }: StepInspectorProps) {
                 <dd>{step.details.previous_height ?? "-"}</dd>
               </div>
               <div>
-                <dt>Hauteur apres</dt>
+                <dt>Hauteur après</dt>
                 <dd>{step.details.new_height ?? "-"}</dd>
               </div>
             </dl>
@@ -105,7 +105,7 @@ export function StepInspector({ step }: StepInspectorProps) {
                     <th>Sommet</th>
                     <th>h(v)</th>
                     <th>e(v)</th>
-                    <th>Etat</th>
+                    <th>État</th>
                   </tr>
                 </thead>
                 <tbody>
