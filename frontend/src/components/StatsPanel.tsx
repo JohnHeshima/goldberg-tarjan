@@ -27,7 +27,7 @@ export function StatsPanel({ graph, simulation }: StatsPanelProps) {
           <strong>{graph.edges.length}</strong>
         </article>
         <article className="metric-card">
-          <span>Capacite totale</span>
+          <span>Capacité totale</span>
           <strong>{graphCapacity.toFixed(2)}</strong>
         </article>
       </div>
