@@ -11,7 +11,7 @@ export function LogPanel({ simulation, currentStepIndex }: LogPanelProps) {
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Trace</p>
-          <h2>Journal d'execution</h2>
+          <h2>Journal d'exécution</h2>
         </div>
       </div>
 
@@ -29,7 +29,7 @@ export function LogPanel({ simulation, currentStepIndex }: LogPanelProps) {
         </ol>
       ) : (
         <p className="muted">
-          Le journal de simulation apparaitra ici avec le detail des pushes et relabels.
+          Le journal de simulation apparaîtra ici avec le détail des pushes et relabels.
         </p>
       )}
     </section>
