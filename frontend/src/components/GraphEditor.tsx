@@ -16,6 +16,19 @@ function parseNumeric(value: string): number | undefined {
 }
 
 export function GraphEditor({ graph, onChange }: GraphEditorProps) {
+  const formatNodeOption = (nodeId: string) => {
+    const node = graph.nodes.find((candidate) => candidate.id === nodeId);
+    if (!node) {
+      return nodeId;
+    }
+
+    if (!node.label || node.label === node.id) {
+      return node.id;
+    }
+
+    return `${node.label} (${node.id})`;
+  };
+
   const handleNodeChange = (
     index: number,
     field: "id" | "label" | "x" | "y",
@@ -151,11 +164,11 @@ export function GraphEditor({ graph, onChange }: GraphEditorProps) {
   };
 
   return (
-    <section className="panel panel-scroll">
+    <section className="panel panel-scroll graph-editor-panel">
       <div className="panel-heading">
         <div>
-          <p className="eyebrow">Edition</p>
-          <h2>Graphe du reseau</h2>
+          <p className="eyebrow">Édition</p>
+          <h2>Graphe du réseau</h2>
         </div>
         <button className="ghost-button" onClick={() => onChange(ensureNodePositions(graph))}>
           Repositionner
@@ -163,94 +176,85 @@ export function GraphEditor({ graph, onChange }: GraphEditorProps) {
       </div>
 
       <div className="stack">
-        <div className="inline-grid">
-          <label>
-            <span>Source</span>
-            <select
-              value={graph.source}
-              onChange={(event) =>
-                onChange({ ...graph, source: event.target.value })
-              }
-            >
-              {graph.nodes.map((node) => (
-                <option key={node.id} value={node.id}>
-                  {node.label || node.id}
-                </option>
-              ))}
-            </select>
-          </label>
+        <p className="editor-intro">
+          Toute modification ci-dessous met à jour le graphe affiché à droite en temps réel.
+        </p>
 
-          <label>
-            <span>Puits</span>
-            <select
-              value={graph.sink}
-              onChange={(event) => onChange({ ...graph, sink: event.target.value })}
-            >
-              {graph.nodes.map((node) => (
-                <option key={node.id} value={node.id}>
-                  {node.label || node.id}
-                </option>
-              ))}
-            </select>
-          </label>
+        <div className="editor-overview">
+          <span className="editor-chip">Sommets {graph.nodes.length}</span>
+          <span className="editor-chip">Arcs {graph.edges.length}</span>
+          <span className="editor-chip">Source {graph.source || "-"}</span>
+          <span className="editor-chip">Puits {graph.sink || "-"}</span>
         </div>
 
-        <div className="table-toolbar">
-          <h3>Sommets</h3>
-          <button className="secondary-button" onClick={addNode}>
-            Ajouter un sommet
-          </button>
+        <div className="editor-config-card">
+          <div className="editor-section-head">
+            <div>
+              <h3>Paramètres globaux</h3>
+              <p className="muted">Sélection rapide de la source et du puits du réseau.</p>
+            </div>
+          </div>
+
+          <div className="inline-grid">
+            <label>
+              <span>Source</span>
+              <select
+                value={graph.source}
+                onChange={(event) =>
+                  onChange({ ...graph, source: event.target.value })
+                }
+              >
+                {graph.nodes.map((node) => (
+                  <option key={node.id} value={node.id}>
+                    {formatNodeOption(node.id)}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label>
+              <span>Puits</span>
+              <select
+                value={graph.sink}
+                onChange={(event) => onChange({ ...graph, sink: event.target.value })}
+              >
+                {graph.nodes.map((node) => (
+                  <option key={node.id} value={node.id}>
+                    {formatNodeOption(node.id)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
         </div>
 
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Libelle</th>
-                <th>X</th>
-                <th>Y</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {graph.nodes.map((node, index) => (
-                <tr key={`${node.id}-${index}`}>
-                  <td>
-                    <input
-                      value={node.id}
-                      onChange={(event) =>
-                        handleNodeChange(index, "id", event.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    <input
-                      value={node.label ?? ""}
-                      onChange={(event) =>
-                        handleNodeChange(index, "label", event.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={node.x ?? ""}
-                      onChange={(event) =>
-                        handleNodeChange(index, "x", event.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={node.y ?? ""}
-                      onChange={(event) =>
-                        handleNodeChange(index, "y", event.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
+        <div className="editor-section">
+          <div className="table-toolbar">
+            <div className="editor-section-head">
+              <div>
+                <h3>Sommets</h3>
+                <p className="muted">Renseignez l'identifiant, le libellé et la position de chaque sommet.</p>
+              </div>
+            </div>
+            <button className="editor-add-button editor-add-button-node" onClick={addNode}>
+              <span className="editor-add-icon" aria-hidden="true">+</span>
+              <span className="editor-add-copy">
+                <strong>Ajouter un sommet</strong>
+                <small>Crée un nouveau nœud modifiable</small>
+              </span>
+            </button>
+          </div>
+
+          <div className="editor-list">
+            {graph.nodes.map((node, index) => (
+              <article className="editor-item-card" key={`${node.id}-${index}`}>
+                <div className="editor-item-header">
+                  <div className="editor-item-title">
+                    <span className="item-tag">Sommet {index + 1}</span>
+                    <strong>{node.label || "Sommet sans libellé"}</strong>
+                  </div>
+                  <div className="editor-inline-actions">
+                    <span className="item-id">{node.id || "id vide"}</span>
                     <button
                       className="danger-button"
                       onClick={() => removeNode(index)}
@@ -258,43 +262,115 @@ export function GraphEditor({ graph, onChange }: GraphEditorProps) {
                     >
                       Supprimer
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                </div>
+
+                <div className="editor-field-grid">
+                  <label>
+                    <span>ID</span>
+                    <input
+                      value={node.id}
+                      placeholder="s"
+                      onChange={(event) =>
+                        handleNodeChange(index, "id", event.target.value)
+                      }
+                    />
+                  </label>
+
+                  <label>
+                    <span>Libellé</span>
+                    <input
+                      value={node.label ?? ""}
+                      placeholder="Source"
+                      onChange={(event) =>
+                        handleNodeChange(index, "label", event.target.value)
+                      }
+                    />
+                  </label>
+
+                  <label>
+                    <span>Position X</span>
+                    <input
+                      type="number"
+                      value={node.x ?? ""}
+                      onChange={(event) =>
+                        handleNodeChange(index, "x", event.target.value)
+                      }
+                    />
+                  </label>
+
+                  <label>
+                    <span>Position Y</span>
+                    <input
+                      type="number"
+                      value={node.y ?? ""}
+                      onChange={(event) =>
+                        handleNodeChange(index, "y", event.target.value)
+                      }
+                    />
+                  </label>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
 
-        <div className="table-toolbar">
-          <h3>Arcs</h3>
-          <button className="secondary-button" onClick={addEdge}>
-            Ajouter un arc
-          </button>
-        </div>
+        <div className="editor-section">
+          <div className="table-toolbar">
+            <div className="editor-section-head">
+              <div>
+                <h3>Arcs</h3>
+                <p className="muted">Définissez la liaison, sa direction et sa capacité en un coup d'œil.</p>
+              </div>
+            </div>
+            <button
+              className="editor-add-button editor-add-button-edge"
+              onClick={addEdge}
+              disabled={graph.nodes.length < 2}
+            >
+              <span className="editor-add-icon" aria-hidden="true">+</span>
+              <span className="editor-add-copy">
+                <strong>Ajouter un arc</strong>
+                <small>Relie deux sommets du réseau</small>
+              </span>
+            </button>
+          </div>
 
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Source</th>
-                <th>Cible</th>
-                <th>Capacite</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {graph.edges.map((edge, index) => (
-                <tr key={`${edge.id ?? "edge"}-${index}`}>
-                  <td>
+          <div className="editor-list">
+            {graph.edges.map((edge, index) => (
+              <article className="editor-item-card" key={`${edge.id ?? "edge"}-${index}`}>
+                <div className="editor-item-header">
+                  <div className="editor-item-title">
+                    <span className="item-tag item-tag-secondary">Arc {index + 1}</span>
+                    <strong>
+                      {formatNodeOption(edge.source)} vers {formatNodeOption(edge.target)}
+                    </strong>
+                  </div>
+                  <div className="editor-inline-actions">
+                    <span className="item-id">{edge.id || "id vide"}</span>
+                    <button
+                      className="danger-button"
+                      onClick={() => removeEdge(index)}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+
+                <div className="editor-field-grid">
+                  <label>
+                    <span>ID</span>
                     <input
                       value={edge.id ?? ""}
+                      placeholder="e1"
                       onChange={(event) =>
                         handleEdgeChange(index, "id", event)
                       }
                     />
-                  </td>
-                  <td>
+                  </label>
+
+                  <label>
+                    <span>Source</span>
                     <select
                       value={edge.source}
                       onChange={(event) =>
@@ -303,12 +379,14 @@ export function GraphEditor({ graph, onChange }: GraphEditorProps) {
                     >
                       {graph.nodes.map((node) => (
                         <option key={node.id} value={node.id}>
-                          {node.label || node.id}
+                          {formatNodeOption(node.id)}
                         </option>
                       ))}
                     </select>
-                  </td>
-                  <td>
+                  </label>
+
+                  <label>
+                    <span>Cible</span>
                     <select
                       value={edge.target}
                       onChange={(event) =>
@@ -317,12 +395,14 @@ export function GraphEditor({ graph, onChange }: GraphEditorProps) {
                     >
                       {graph.nodes.map((node) => (
                         <option key={node.id} value={node.id}>
-                          {node.label || node.id}
+                          {formatNodeOption(node.id)}
                         </option>
                       ))}
                     </select>
-                  </td>
-                  <td>
+                  </label>
+
+                  <label>
+                    <span>Capacité</span>
                     <input
                       type="number"
                       min={0}
@@ -331,19 +411,11 @@ export function GraphEditor({ graph, onChange }: GraphEditorProps) {
                         handleEdgeChange(index, "capacity", event)
                       }
                     />
-                  </td>
-                  <td>
-                    <button
-                      className="danger-button"
-                      onClick={() => removeEdge(index)}
-                    >
-                      Supprimer
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </label>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
