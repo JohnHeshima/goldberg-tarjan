@@ -129,7 +129,7 @@ class PushRelabelEngine:
         self._record_step(
             action="initialize",
             message=(
-                f"Initialisation du preflot: hauteur({self.source}) = {len(self.nodes)}."
+                f"Initialisation du préflot: hauteur({self.source}) = {len(self.nodes)}."
             ),
             active_vertex=self.source,
         )
@@ -146,7 +146,7 @@ class PushRelabelEngine:
             self._record_step(
                 action="push",
                 message=(
-                    f"Preflot initial: envoi de {amount:.2f} unite(s) "
+                    f"Préflot initial: envoi de {amount:.2f} unité(s) "
                     f"de {self.source} vers {edge.to}."
                 ),
                 active_vertex=self.source,
@@ -210,7 +210,7 @@ class PushRelabelEngine:
                 self._record_step(
                     action="push",
                     message=(
-                        f"Push de {amount:.2f} unite(s) de {vertex} vers {target}."
+                        f"Push de {amount:.2f} unité(s) de {vertex} vers {target}."
                     ),
                     active_vertex=vertex,
                     details=StepDetails(
@@ -237,7 +237,7 @@ class PushRelabelEngine:
 
         self._record_step(
             action="complete",
-            message=f"Execution terminee. Flot maximum = {self._total_flow():.2f}.",
+            message=f"Exécution terminée. Flot maximum = {self._total_flow():.2f}.",
             active_vertex=None,
         )
 
