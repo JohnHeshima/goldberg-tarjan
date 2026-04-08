@@ -1,56 +1,56 @@
 # Goldberg-Tarjan Visual Lab
 
-Plateforme pedagogique pour comprendre, manipuler et visualiser l'algorithme de Goldberg-Tarjan (Push-Relabel) applique au probleme du flot maximum.
+Plateforme pédagogique pour comprendre, manipuler et visualiser l'algorithme de Goldberg-Tarjan (Push-Relabel) appliqué au problème du flot maximum.
 
-Le projet combine:
-- un backend `FastAPI` qui execute l'algorithme,
-- un frontend `React + Vite + TypeScript` qui permet d'editer un graphe,
-- une visualisation interactive des sommets, arcs, hauteurs, exces et etapes de calcul.
+Le projet combine :
+- un backend `FastAPI` qui exécute l'algorithme ;
+- un frontend `React + Vite + TypeScript` qui permet d'éditer un graphe ;
+- une visualisation interactive des sommets, arcs, hauteurs, excès et étapes de calcul.
 
 ## 1. Pourquoi cet algorithme
 
-L'algorithme de Goldberg-Tarjan sert a resoudre un probleme central en recherche operationnelle et en theorie des graphes: trouver le flot maximum entre une source et un puits dans un reseau capacitaire.
+L'algorithme de Goldberg-Tarjan sert à résoudre un problème central en recherche opérationnelle et en théorie des graphes : trouver le flot maximum entre une source et un puits dans un réseau capacitaire.
 
-En pratique, ce type de modele apparait dans:
-- les reseaux de transport,
-- les reseaux de communication,
-- la circulation de ressources dans une chaine logistique,
-- certains problemes d'affectation, de planification et de repartition de capacite.
+En pratique, ce type de modèle apparaît dans :
+- les réseaux de transport ;
+- les réseaux de communication ;
+- la circulation de ressources dans une chaîne logistique ;
+- certains problèmes d'affectation, de planification et de répartition de capacité.
 
-Contrairement aux approches basees sur la recherche repetee de chemins augmentants, Push-Relabel travaille avec deux notions internes tres importantes:
-- la `hauteur` de chaque sommet,
-- l'`exces` de flot present sur les sommets intermediaires.
+Contrairement aux approches fondées sur la recherche répétée de chemins augmentants, Push-Relabel travaille avec deux notions internes très importantes :
+- la `hauteur` de chaque sommet ;
+- l'`excès` de flot présent sur les sommets intermédiaires.
 
-Le principe est le suivant:
-1. on sature initialement les arcs sortant de la source,
-2. on pousse le flot depuis les sommets actifs vers des voisins admissibles,
-3. si aucun push n'est possible, on releve (`relabel`) la hauteur du sommet,
-4. on repete jusqu'a ce qu'il n'existe plus de sommet actif hors source et puits.
+Le principe est le suivant :
+1. on sature initialement les arcs sortant de la source ;
+2. on pousse le flot depuis les sommets actifs vers des voisins admissibles ;
+3. si aucun push n'est possible, on relève (`relabel`) la hauteur du sommet ;
+4. on répète jusqu'à ce qu'il n'existe plus de sommet actif hors source et puits.
 
-Cette approche est tres interessante pedagogiquement parce qu'elle montre:
-- comment evoluent les contraintes de capacite,
-- comment l'etat interne de l'algorithme change pas a pas,
-- pourquoi la notion de sommet actif est essentielle,
-- comment le flot maximum emerge d'une suite d'operations locales.
+Cette approche est très intéressante pédagogiquement parce qu'elle montre :
+- comment évoluent les contraintes de capacité ;
+- comment l'état interne de l'algorithme change pas à pas ;
+- pourquoi la notion de sommet actif est essentielle ;
+- comment le flot maximum émerge d'une suite d'opérations locales.
 
 ## 2. Ce que permet la plateforme
 
-La plateforme a ete construite pour rendre l'algorithme visible et manipulable.
+La plateforme a été construite pour rendre l'algorithme visible et manipulable.
 
-Elle permet de:
-- charger des graphes d'exemple,
-- creer un graphe personnalise,
-- ajouter, modifier ou supprimer des sommets,
-- ajouter, modifier ou supprimer des arcs,
-- choisir la source et le puits,
-- repositionner automatiquement les sommets,
-- executer l'algorithme en mode complet,
-- naviguer etape par etape dans la simulation,
-- visualiser le journal d'execution,
-- lire les statistiques de calcul,
-- observer les hauteurs, exces, arcs et actions `push` / `relabel` en temps reel.
+Elle permet de :
+- charger des graphes d'exemple ;
+- créer un graphe personnalisé ;
+- ajouter, modifier ou supprimer des sommets ;
+- ajouter, modifier ou supprimer des arcs ;
+- choisir la source et le puits ;
+- repositionner automatiquement les sommets ;
+- exécuter l'algorithme en mode complet ;
+- naviguer étape par étape dans la simulation ;
+- visualiser le journal d'exécution ;
+- lire les statistiques de calcul ;
+- observer les hauteurs, excès, arcs et actions `push` / `relabel` en temps réel.
 
-Autrement dit, ce n'est pas seulement une API de calcul. C'est un laboratoire visuel pour experimenter l'algorithme.
+Autrement dit, ce n'est pas seulement une API de calcul. C'est un laboratoire visuel pour expérimenter l'algorithme.
 
 ## 3. Architecture du projet
 
@@ -97,41 +97,41 @@ GOLDBERG-TARJAN/
 
 ### Backend
 
-Le backend expose une API REST pour:
-- verifier l'etat du service,
-- recuperer des graphes de demonstration,
+Le backend expose une API REST pour :
+- vérifier l'état du service ;
+- récupérer des graphes de démonstration ;
 - lancer une simulation de flot maximum.
 
-Fichiers clefs:
-- `backend/app/main.py`: configuration de l'application FastAPI et du CORS
-- `backend/app/api/routes.py`: endpoints REST
-- `backend/app/core/push_relabel.py`: coeur de l'algorithme
-- `backend/app/models/schemas.py`: schemas d'entree et de sortie
-- `backend/app/services/examples.py`: jeux de donnees de demonstration
+Fichiers clés :
+- `backend/app/main.py` : configuration de l'application FastAPI et du CORS ;
+- `backend/app/api/routes.py` : endpoints REST ;
+- `backend/app/core/push_relabel.py` : cœur de l'algorithme ;
+- `backend/app/models/schemas.py` : schémas d'entrée et de sortie ;
+- `backend/app/services/examples.py` : jeux de données de démonstration.
 
 ### Frontend
 
-Le frontend sert d'interface d'experimentation.
+Le frontend sert d'interface d'expérimentation.
 
-Fichiers clefs:
-- `frontend/src/App.tsx`: orchestration generale
-- `frontend/src/api/client.ts`: appels au backend
-- `frontend/src/components/GraphEditor.tsx`: edition du graphe
-- `frontend/src/components/GraphCanvas.tsx`: visualisation interactive
-- `frontend/src/components/ControlPanel.tsx`: commandes de simulation
-- `frontend/src/components/StepInspector.tsx`: lecture detaillee de l'etat courant
-- `frontend/src/components/LogPanel.tsx`: journal d'execution
-- `frontend/src/components/StatsPanel.tsx`: resume quantitatif
+Fichiers clés :
+- `frontend/src/App.tsx` : orchestration générale ;
+- `frontend/src/api/client.ts` : appels au backend ;
+- `frontend/src/components/GraphEditor.tsx` : édition du graphe ;
+- `frontend/src/components/GraphCanvas.tsx` : visualisation interactive ;
+- `frontend/src/components/ControlPanel.tsx` : commandes de simulation ;
+- `frontend/src/components/StepInspector.tsx` : lecture détaillée de l'état courant ;
+- `frontend/src/components/LogPanel.tsx` : journal d'exécution ;
+- `frontend/src/components/StatsPanel.tsx` : résumé quantitatif.
 
 ## 5. Lancer le projet
 
-### Prerequis
+### Prérequis
 
-- Python 3.10+ recommande
-- Node.js 18+ recommande
-- npm
+- Python 3.10+ recommandé ;
+- Node.js 18+ recommandé ;
+- npm.
 
-### Demarrer le backend
+### Démarrer le backend
 
 ```bash
 cd backend
@@ -141,23 +141,23 @@ pip install -r requirements.txt
 .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-Backend disponible sur:
+Backend disponible sur :
 - `http://127.0.0.1:8000`
-- documentation Swagger: `http://127.0.0.1:8000/docs`
+- documentation Swagger : `http://127.0.0.1:8000/docs`
 
-Verification rapide:
+Vérification rapide :
 
 ```bash
 curl http://127.0.0.1:8000/api/v1/health
 ```
 
-Reponse attendue:
+Réponse attendue :
 
 ```json
 {"status":"ok"}
 ```
 
-### Demarrer le frontend
+### Démarrer le frontend
 
 ```bash
 cd frontend
@@ -165,18 +165,18 @@ npm install
 npm run dev -- --host 127.0.0.1 --port 5173
 ```
 
-Frontend disponible sur:
+Frontend disponible sur :
 - `http://127.0.0.1:5173`
 
 ### Variable d'environnement optionnelle
 
-Le frontend pointe par defaut vers:
+Le frontend pointe par défaut vers :
 
 ```text
 http://127.0.0.1:8000/api/v1
 ```
 
-Si necessaire, creer une variable d'environnement:
+Si nécessaire, créez une variable d'environnement :
 
 ```bash
 VITE_API_BASE_URL=http://127.0.0.1:8000/api/v1
@@ -184,84 +184,84 @@ VITE_API_BASE_URL=http://127.0.0.1:8000/api/v1
 
 ## 6. Comment utiliser la plateforme
 
-### Etape 1. Ouvrir l'interface
+### Étape 1. Ouvrir l'interface
 
-Ouvrir dans le navigateur:
+Ouvrir dans le navigateur :
 
 ```text
 http://127.0.0.1:5173
 ```
 
-### Etape 2. Choisir un graphe
+### Étape 2. Choisir un graphe
 
-Dans le panneau de controle:
-- charger un exemple predefini,
+Dans le panneau de contrôle :
+- charger un exemple prédéfini ;
 - ou partir d'un graphe que vous allez modifier manuellement.
 
-### Etape 3. Editer le reseau
+### Étape 3. Éditer le réseau
 
-Dans la carte `Graphe du reseau`:
-- definir la `source`,
-- definir le `puits`,
-- ajouter un sommet,
-- modifier son `id`, son libelle et sa position,
-- ajouter un arc,
-- choisir sa source, sa cible et sa capacite,
-- supprimer les elements inutiles.
+Dans la carte `Graphe du réseau` :
+- définir la `source` ;
+- définir le `puits` ;
+- ajouter un sommet ;
+- modifier son `id`, son libellé et sa position ;
+- ajouter un arc ;
+- choisir sa source, sa cible et sa capacité ;
+- supprimer les éléments inutiles.
 
-Les changements sont repercutes directement dans la visualisation du graphe.
+Les changements sont répercutés directement dans la visualisation du graphe.
 
-### Etape 4. Lancer la simulation
+### Étape 4. Lancer la simulation
 
-Depuis le panneau de controle:
-- lancer l'execution complete,
-- ou demarrer une lecture pas a pas selon les controles disponibles.
+Depuis le panneau de contrôle :
+- lancer l'exécution complète ;
+- ou démarrer une lecture pas à pas selon les contrôles disponibles.
 
-Le backend calcule alors:
-- le flot maximum final,
-- la suite des etats intermediaires,
-- les operations effectuees,
+Le backend calcule alors :
+- le flot maximum final ;
+- la suite des états intermédiaires ;
+- les opérations effectuées ;
 - les statistiques globales.
 
-### Etape 5. Lire les resultats
+### Étape 5. Lire les résultats
 
-La plateforme permet ensuite d'observer:
-- le graphe courant,
-- les sommets actifs,
-- les exces,
-- les hauteurs,
-- le journal des actions,
-- les statistiques d'execution,
-- l'etat detaille de chaque etape.
+La plateforme permet ensuite d'observer :
+- le graphe courant ;
+- les sommets actifs ;
+- les excès ;
+- les hauteurs ;
+- le journal des actions ;
+- les statistiques d'exécution ;
+- l'état détaillé de chaque étape.
 
-## 7. Scenario type d'utilisation
+## 7. Scénario type d'utilisation
 
-Voici un parcours simple pour une demonstration:
+Voici un parcours simple pour une démonstration :
 
-1. lancer backend et frontend,
-2. ouvrir l'interface,
-3. charger un exemple preconfigure,
-4. observer le graphe initial,
-5. lancer la simulation,
-6. avancer etape par etape,
-7. commenter les operations `push` et `relabel`,
-8. modifier ensuite une capacite ou ajouter un arc,
-9. relancer la simulation,
-10. comparer le nouveau resultat.
+1. lancer backend et frontend ;
+2. ouvrir l'interface ;
+3. charger un exemple préconfiguré ;
+4. observer le graphe initial ;
+5. lancer la simulation ;
+6. avancer étape par étape ;
+7. commenter les opérations `push` et `relabel` ;
+8. modifier ensuite une capacité ou ajouter un arc ;
+9. relancer la simulation ;
+10. comparer le nouveau résultat.
 
-Ce workflow est utile pour:
-- un cours,
-- une demonstration devant enseignant,
-- une prise en main individuelle,
-- une verification experimentale sur des petits graphes.
+Ce workflow est utile pour :
+- un cours ;
+- une démonstration devant enseignant ;
+- une prise en main individuelle ;
+- une vérification expérimentale sur des petits graphes.
 
-## 8. API exposee
+## 8. API exposée
 
 ### `GET /api/v1/health`
 
-Retourne l'etat du backend.
+Retourne l'état du backend.
 
-Exemple:
+Exemple :
 
 ```bash
 curl http://127.0.0.1:8000/api/v1/health
@@ -269,9 +269,9 @@ curl http://127.0.0.1:8000/api/v1/health
 
 ### `GET /api/v1/examples`
 
-Retourne les graphes d'exemple charges par le backend.
+Retourne les graphes d'exemple chargés par le backend.
 
-Exemple:
+Exemple :
 
 ```bash
 curl http://127.0.0.1:8000/api/v1/examples
@@ -279,9 +279,9 @@ curl http://127.0.0.1:8000/api/v1/examples
 
 ### `POST /api/v1/max-flow/run`
 
-Execute l'algorithme de Push-Relabel sur un graphe fourni.
+Exécute l'algorithme de Push-Relabel sur un graphe fourni.
 
-Exemple de payload:
+Exemple de payload :
 
 ```json
 {
@@ -301,7 +301,7 @@ Exemple de payload:
 }
 ```
 
-Exemple `curl`:
+Exemple `curl` :
 
 ```bash
 curl -X POST http://127.0.0.1:8000/api/v1/max-flow/run \
@@ -325,29 +325,29 @@ curl -X POST http://127.0.0.1:8000/api/v1/max-flow/run \
 
 ## 9. Ce qu'il faut observer pendant une simulation
 
-Pour bien comprendre l'algorithme, surveiller en priorite:
-- quels sommets deviennent actifs,
-- quand un `push` est possible,
-- quand un `relabel` devient necessaire,
-- comment evoluent les exces,
-- comment la hauteur guide le sens des pushes,
-- a quel moment l'etat final devient stable.
+Pour bien comprendre l'algorithme, surveillez en priorité :
+- quels sommets deviennent actifs ;
+- quand un `push` est possible ;
+- quand un `relabel` devient nécessaire ;
+- comment évoluent les excès ;
+- comment la hauteur guide le sens des pushes ;
+- à quel moment l'état final devient stable.
 
-La plateforme est utile justement parce qu'elle relie ces notions abstraites a un etat graphique et a un journal lisible.
+La plateforme est utile justement parce qu'elle relie ces notions abstraites à un état graphique et à un journal lisible.
 
-## 10. Jeux de demonstration
+## 10. Jeux de démonstration
 
-Les graphes de demonstration sont definis dans:
+Les graphes de démonstration sont définis dans :
 - `backend/app/services/examples.py`
 - `frontend/src/utils/graph.ts` pour le fallback local
 
-## 11. Depannage rapide
+## 11. Dépannage rapide
 
-### Le backend ne demarre pas
+### Le backend ne démarre pas
 
-Verifier qu'aucun processus n'occupe deja le port `8000`.
+Vérifiez qu'aucun processus n'occupe déjà le port `8000`.
 
-Exemple:
+Exemple :
 
 ```bash
 ss -ltnp | rg ':8000'
@@ -355,28 +355,28 @@ ss -ltnp | rg ':8000'
 
 ### Le frontend ne charge pas les exemples
 
-Verifier:
-- que le backend tourne,
-- que `http://127.0.0.1:8000/api/v1/health` repond,
+Vérifiez :
+- que le backend tourne ;
+- que `http://127.0.0.1:8000/api/v1/health` répond ;
 - que la variable `VITE_API_BASE_URL` est correcte si vous l'utilisez.
 
-### Une dependance frontend n'est pas trouvee
+### Une dépendance frontend n'est pas trouvée
 
-Relancer:
+Relancer :
 
 ```bash
 cd frontend
 npm install
 ```
 
-## 12. Finalite du projet
+## 12. Finalité du projet
 
-Ce projet a ete concu pour faire plus qu'afficher un resultat final.
+Ce projet a été conçu pour faire plus qu'afficher un résultat final.
 
-Il sert a:
-- comprendre la logique interne de Goldberg-Tarjan,
-- illustrer un algorithme de flot maximum de maniere interactive,
-- offrir un support de presentation academique,
+Il sert à :
+- comprendre la logique interne de Goldberg-Tarjan ;
+- illustrer un algorithme de flot maximum de manière interactive ;
+- offrir un support de présentation académique ;
 - tester rapidement des variantes de graphes via une interface exploitable.
 
-Si vous cherchez un support de demonstration clair, modifiable et immediatement executable, cette plateforme remplit precisement ce role.
+Si vous cherchez un support de démonstration clair, modifiable et immédiatement exécutable, cette plateforme remplit précisément ce rôle.
