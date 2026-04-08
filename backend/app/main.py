@@ -9,8 +9,8 @@ from app.api.routes import router
 app = FastAPI(
     title="Goldberg-Tarjan Max Flow API",
     description=(
-        "API de demonstration pour l'algorithme Push-Relabel applique "
-        "au probleme du flot maximum."
+        "API de démonstration pour l'algorithme Push-Relabel appliqué "
+        "au problème du flot maximum."
     ),
     version="1.0.0",
 )
